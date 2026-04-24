@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, useMotionValue, useTransform, useInView } from "framer-motion";
 import { Heart } from "lucide-react";
+import Image from "next/image";
 import { content } from "../data/content";
 import { useMobile } from "../hooks/useMobile";
 
@@ -69,7 +70,7 @@ export default function MusicSection() {
       audioRef.current.pause();
       setIsPlaying(false);
     }
-  }, [inView]);
+  }, [inView, isPlaying]);
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -128,14 +129,17 @@ export default function MusicSection() {
           viewport={{ once: true }}
           transition={{ duration: 1.5, type: "spring" }}
           animate={isPlaying ? { scale: [1, 1.05, 1], boxShadow: "0 0 40px 10px rgba(199, 44, 104, 0.8)" } : {}}
-          className="relative w-48 h-48 md:w-64 md:h-64 rounded-full p-2 border-2 border-primary-pink cursor-pointer mb-8"
+          className="relative flex items-center justify-center w-48 h-48 md:w-64 md:h-64 rounded-full p-2 border-2 border-primary-pink cursor-pointer mb-8"
         >
-          <img 
-            src={content.music.finalPhoto} 
-            alt="Final beautiful memory" 
-            className="w-full h-full object-cover rounded-full pointer-events-none transition-all duration-500 opacity-100"
-            style={{ transform: "translateZ(30px)" }}
-          />
+          <div className="relative w-full h-full rounded-full overflow-hidden" style={{ transform: "translateZ(30px)" }}>
+            <Image 
+              src={content.music.finalPhoto} 
+              alt="Final beautiful memory" 
+              fill
+              sizes="(max-width: 768px) 192px, 256px"
+              className="object-cover pointer-events-none transition-all duration-500 opacity-100"
+            />
+          </div>
         </motion.div>
 
         {/* Title Lines */}

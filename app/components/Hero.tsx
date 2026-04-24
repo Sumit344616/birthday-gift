@@ -135,9 +135,7 @@ function Typewriter({ text, delay }: { text: string; delay: number }) {
   const [displayText, setDisplayText] = useState("");
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
-    
-    timeout = setTimeout(() => {
+    const timeout = setTimeout(() => {
       let i = 0;
       const typing = setInterval(() => {
         setDisplayText(text.slice(0, i + 1));

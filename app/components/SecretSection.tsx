@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart } from "lucide-react";
 import { content } from "../data/content";
@@ -9,30 +9,33 @@ import { useMobile } from "../hooks/useMobile";
 const HeartConfetti = ({ isMobile }: { isMobile: boolean }) => {
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden z-[999999]">
-      {[...Array(isMobile ? 15 : 50)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute text-primary-pink drop-shadow-[0_0_15px_rgba(199,44,104,0.8)]"
-          initial={{
-            x: "50vw",
-            y: "50vh",
-            scale: 0,
-          }}
-          animate={{
-            x: `calc(50vw + ${(Math.random() - 0.5) * 100}vw)`,
-            y: `calc(50vh + ${(Math.random() - 0.5) * 100}vh)`,
-            scale: Math.random() * 1.5 + 0.5,
-            rotate: Math.random() * 720,
-            opacity: [1, 1, 0],
-          }}
-          transition={{
-            duration: Math.random() * 3 + 2,
-            ease: "easeOut",
-          }}
-        >
-          <Heart fill="currentColor" size={Math.random() * 20 + 10} />
-        </motion.div>
-      ))}
+      {[...Array(isMobile ? 15 : 50)].map((_, i) => {
+        const size = Math.random() * 20 + 10;
+        return (
+          <motion.div
+            key={i}
+            className="absolute text-primary-pink drop-shadow-[0_0_15px_rgba(199,44,104,0.8)]"
+            initial={{
+              x: "50vw",
+              y: "50vh",
+              scale: 0,
+            }}
+            animate={{
+              x: `calc(50vw + ${(Math.random() - 0.5) * 100}vw)`,
+              y: `calc(50vh + ${(Math.random() - 0.5) * 100}vh)`,
+              scale: Math.random() * 1.5 + 0.5,
+              rotate: Math.random() * 720,
+              opacity: [1, 1, 0],
+            }}
+            transition={{
+              duration: Math.random() * 3 + 2,
+              ease: "easeOut",
+            }}
+          >
+            <Heart fill="currentColor" size={size} />
+          </motion.div>
+        );
+      })}
     </div>
   );
 };
@@ -42,13 +45,11 @@ export default function SecretSection() {
   const [showConfetti, setShowConfetti] = useState(false);
   const isMobile = useMobile();
 
-  useEffect(() => {
-    if (isOpen) {
-      setShowConfetti(true);
-      const timer = setTimeout(() => setShowConfetti(false), 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [isOpen]);
+  const handleOpen = () => {
+    setIsOpen(true);
+    setShowConfetti(true);
+    setTimeout(() => setShowConfetti(false), 5000);
+  };
 
   return (
     <section className="w-full bg-transparent py-32 flex flex-col items-center justify-center relative overflow-hidden">
@@ -58,7 +59,7 @@ export default function SecretSection() {
       </AnimatePresence>
 
       <motion.button
-        onClick={() => setIsOpen(true)}
+        onClick={handleOpen}
         initial={{ opacity: 0, scale: 0.8 }}
         whileInView={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1 }}

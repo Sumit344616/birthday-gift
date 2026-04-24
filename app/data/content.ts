@@ -58,7 +58,7 @@ export const content = {
       "Happy Birthday… and thank you for coming into my life ❤️"
     ],
     songUrl: "/meri_banogi_kya.mp3",
-    finalPhoto: "https://images.unsplash.com/photo-1601288496920-b6154fe3626a?q=80&w=600&auto=format&fit=crop",
+    finalPhoto: "/images/gallery-2.jpeg",
     lyrics: [
       { time: 0, text: "वादे तो मैं, करता नही" },
       { time: 4, text: "चाँद तारों के" },

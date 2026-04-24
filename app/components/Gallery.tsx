@@ -6,7 +6,7 @@ import Image from "next/image";
 import { content } from "../data/content";
 import { useMobile } from "../hooks/useMobile";
 
-function Card3D({ photo, index }: { photo: any; index: number }) {
+function Card3D({ photo, index }: { photo: { src: string; alt: string }; index: number }) {
   const isMobile = useMobile();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -47,7 +47,7 @@ function Card3D({ photo, index }: { photo: any; index: number }) {
         whileInView={{ opacity: 1, scale: 1, rotateX: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, ease: "easeOut", delay: index * 0.1 }}
-        className="w-full h-48 md:h-64 rounded-xl overflow-hidden cursor-pointer"
+        className="relative w-full h-48 md:h-64 rounded-xl overflow-hidden cursor-pointer"
         whileHover={{ scale: 1.05 }}
       >
         <div className="absolute inset-0 glow-effect opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ transform: isMobile ? "none" : "translateZ(30px)" }} />
