@@ -7,60 +7,19 @@ import { content } from "../data/content";
 import { useMobile } from "../hooks/useMobile";
 
 function Card3D({ photo, index }: { photo: { src: string; alt: string }; index: number }) {
-  const isMobile = useMobile();
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const rotateX = useTransform(y, [-100, 100], [15, -15]);
-  const rotateY = useTransform(x, [-100, 100], [-15, 15]);
-
-  function handleMouse(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    if (isMobile) return;
-    const rect = event.currentTarget.getBoundingClientRect();
-    x.set(event.clientX - rect.left - rect.width / 2);
-    y.set(event.clientY - rect.top - rect.height / 2);
-  }
-
-  function handleMouseLeave() {
-    if (isMobile) return;
-    x.set(0);
-    y.set(0);
-  }
-
   return (
-    <motion.div
-      style={{
-        perspective: 1000,
-        transformStyle: "preserve-3d",
-      }}
-      className={`relative rounded-xl shadow-xl z-10 hover:z-20 ${index % 2 === 0 ? "translate-y-8" : ""}`}
-    >
-      <motion.div
-        onMouseMove={handleMouse}
-        onMouseLeave={handleMouseLeave}
-        style={{
-          rotateX: isMobile ? 0 : rotateX,
-          rotateY: isMobile ? 0 : rotateY,
-          transformStyle: "preserve-3d",
-        }}
-        initial={{ opacity: 0, scale: 0.8, rotateX: isMobile ? 0 : 30 }}
-        whileInView={{ opacity: 1, scale: 1, rotateX: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8, ease: "easeOut", delay: index * 0.1 }}
-        className="relative w-full h-48 md:h-64 rounded-xl overflow-hidden cursor-pointer"
-        whileHover={{ scale: 1.05 }}
-      >
-        <div className="absolute inset-0 glow-effect opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ transform: isMobile ? "none" : "translateZ(30px)" }} />
+    <div className={`relative rounded-xl shadow-xl z-10 hover:z-20 ${index % 2 === 0 ? "translate-y-8" : ""}`}>
+      <div className="relative w-full h-48 md:h-64 rounded-xl overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-[1.02]">
+        <div className="absolute inset-0 glow-effect opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
         <Image
           src={photo.src}
           alt={photo.alt}
           fill
           sizes="(max-width: 768px) 50vw, 33vw"
           className="object-cover pointer-events-none"
-          style={{ transform: isMobile ? "none" : "translateZ(20px)" }}
         />
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }
 
