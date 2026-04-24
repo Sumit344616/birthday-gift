@@ -2,9 +2,12 @@
 
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { Flower2, Heart } from "lucide-react";
+import Image from "next/image";
 import { content } from "../data/content";
+import { useMobile } from "../hooks/useMobile";
 
 function Card3D({ photo, index }: { photo: any; index: number }) {
+  const isMobile = useMobile();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
@@ -12,12 +15,14 @@ function Card3D({ photo, index }: { photo: any; index: number }) {
   const rotateY = useTransform(x, [-100, 100], [-15, 15]);
 
   function handleMouse(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    if (isMobile) return;
     const rect = event.currentTarget.getBoundingClientRect();
     x.set(event.clientX - rect.left - rect.width / 2);
     y.set(event.clientY - rect.top - rect.height / 2);
   }
 
   function handleMouseLeave() {
+    if (isMobile) return;
     x.set(0);
     y.set(0);
   }
@@ -34,32 +39,34 @@ function Card3D({ photo, index }: { photo: any; index: number }) {
         onMouseMove={handleMouse}
         onMouseLeave={handleMouseLeave}
         style={{
-          rotateX,
-          rotateY,
+          rotateX: isMobile ? 0 : rotateX,
+          rotateY: isMobile ? 0 : rotateY,
           transformStyle: "preserve-3d",
         }}
-        initial={{ opacity: 0, scale: 0.8, rotateX: 30 }}
+        initial={{ opacity: 0, scale: 0.8, rotateX: isMobile ? 0 : 30 }}
         whileInView={{ opacity: 1, scale: 1, rotateX: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, ease: "easeOut", delay: index * 0.1 }}
         className="w-full h-48 md:h-64 rounded-xl overflow-hidden cursor-pointer"
         whileHover={{ scale: 1.05 }}
       >
-        <div className="absolute inset-0 glow-effect opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ transform: "translateZ(30px)" }} />
-        <img
+        <div className="absolute inset-0 glow-effect opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ transform: isMobile ? "none" : "translateZ(30px)" }} />
+        <Image
           src={photo.src}
           alt={photo.alt}
-          className="w-full h-full object-cover pointer-events-none"
-          style={{ transform: "translateZ(20px)" }}
+          fill
+          sizes="(max-width: 768px) 50vw, 33vw"
+          className="object-cover pointer-events-none"
+          style={{ transform: isMobile ? "none" : "translateZ(20px)" }}
         />
       </motion.div>
     </motion.div>
   );
 }
 
-const SnowEffect = () => (
+const SnowEffect = ({ isMobile }: { isMobile: boolean }) => (
   <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden rounded-3xl">
-    {[...Array(30)].map((_, i) => (
+    {[...Array(isMobile ? 10 : 30)].map((_, i) => (
       <motion.div
         key={i}
         className="absolute bg-white rounded-full opacity-60 drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]"
@@ -84,9 +91,9 @@ const SnowEffect = () => (
   </div>
 );
 
-const RoseRainEffect = () => (
+const RoseRainEffect = ({ isMobile }: { isMobile: boolean }) => (
   <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden rounded-3xl">
-    {[...Array(25)].map((_, i) => {
+    {[...Array(isMobile ? 8 : 25)].map((_, i) => {
       const Icon = i % 3 === 0 ? Heart : Flower2;
       return (
         <motion.div
@@ -116,12 +123,14 @@ const RoseRainEffect = () => (
 );
 
 export default function Gallery() {
+  const isMobile = useMobile();
+
   return (
     <section className="min-h-screen py-24 bg-transparent w-full px-6 md:px-12 flex flex-col md:flex-row items-center justify-center gap-12" style={{ perspective: "1500px" }}>
       
       {/* Left side text with Snow */}
       <div className="relative w-full md:w-1/2 flex flex-col justify-center gap-2 min-h-[50vh] p-4 md:p-8">
-        <SnowEffect />
+        <SnowEffect isMobile={isMobile} />
         
         <div className="z-10 flex flex-col gap-2">
           {content.gallery.lines.map((line, idx) => (
@@ -141,7 +150,7 @@ export default function Gallery() {
 
       {/* Right side photos with Rose Rain */}
       <div className="relative w-full md:w-1/2 grid grid-cols-2 gap-8 md:gap-4 p-8 min-h-[50vh]">
-        <RoseRainEffect />
+        <RoseRainEffect isMobile={isMobile} />
         
         {content.gallery.photos.map((photo, i) => (
           <Card3D key={i} photo={photo} index={i} />

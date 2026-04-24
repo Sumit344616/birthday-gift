@@ -10,9 +10,11 @@ import MusicSection from "./components/MusicSection";
 import SecretSection from "./components/SecretSection";
 import CustomCursor from "./components/CustomCursor";
 import { Heart } from "lucide-react";
+import { useMobile } from "./hooks/useMobile";
 
 export default function Home() {
   const [started, setStarted] = useState(false);
+  const isMobile = useMobile();
 
   return (
     <main className="flex min-h-screen flex-col bg-black text-white selection:bg-primary-pink selection:text-white relative w-full animated-gradient-bg">
@@ -22,7 +24,7 @@ export default function Home() {
         {!started && (
           <motion.div 
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0, filter: "blur(20px)" }}
+            exit={{ opacity: 0, filter: isMobile ? "none" : "blur(20px)" }}
             transition={{ duration: 1.5, ease: "easeInOut" }}
             className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-black/60 backdrop-blur-md cursor-pointer"
             onClick={() => setStarted(true)}

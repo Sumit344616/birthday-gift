@@ -15,19 +15,19 @@ export const content = {
   gallery: {
     photos: [
       {
-        src: "https://images.unsplash.com/photo-1549468057-5b7fa1a41d7a?q=80&w=600&auto=format&fit=crop",
+        src: "/images/gallery-1.jpeg",
         alt: "Memory 1",
       },
       {
-        src: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=600&auto=format&fit=crop",
+        src: "/images/gallery-2.jpeg",
         alt: "Memory 2",
       },
       {
-        src: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=600&auto=format&fit=crop",
+        src: "/images/gallery-3.jpeg",
         alt: "Memory 3",
       },
       {
-        src: "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?q=80&w=600&auto=format&fit=crop",
+        src: "/images/gallery-4.jpeg",
         alt: "Memory 4",
       },
     ],

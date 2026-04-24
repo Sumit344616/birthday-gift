@@ -4,11 +4,12 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart } from "lucide-react";
 import { content } from "../data/content";
+import { useMobile } from "../hooks/useMobile";
 
-const HeartConfetti = () => {
+const HeartConfetti = ({ isMobile }: { isMobile: boolean }) => {
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden z-[999999]">
-      {[...Array(50)].map((_, i) => (
+      {[...Array(isMobile ? 15 : 50)].map((_, i) => (
         <motion.div
           key={i}
           className="absolute text-primary-pink drop-shadow-[0_0_15px_rgba(199,44,104,0.8)]"
@@ -39,6 +40,7 @@ const HeartConfetti = () => {
 export default function SecretSection() {
   const [isOpen, setIsOpen] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const isMobile = useMobile();
 
   useEffect(() => {
     if (isOpen) {
@@ -52,7 +54,7 @@ export default function SecretSection() {
     <section className="w-full bg-transparent py-32 flex flex-col items-center justify-center relative overflow-hidden">
       
       <AnimatePresence>
-        {showConfetti && <HeartConfetti />}
+        {showConfetti && <HeartConfetti isMobile={isMobile} />}
       </AnimatePresence>
 
       <motion.button

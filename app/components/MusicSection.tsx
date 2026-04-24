@@ -4,13 +4,14 @@ import { useState, useRef, useEffect } from "react";
 import { motion, useMotionValue, useTransform, useInView } from "framer-motion";
 import { Heart } from "lucide-react";
 import { content } from "../data/content";
+import { useMobile } from "../hooks/useMobile";
 
-const MagicalFloatingHearts = ({ active }: { active: boolean }) => {
+const MagicalFloatingHearts = ({ active, isMobile }: { active: boolean, isMobile: boolean }) => {
   if (!active) return null;
   
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-      {[...Array(30)].map((_, i) => (
+      {[...Array(isMobile ? 10 : 30)].map((_, i) => (
         <motion.div
           key={i}
           className="absolute text-primary-pink drop-shadow-[0_0_10px_rgba(199,44,104,0.8)]"
@@ -45,6 +46,7 @@ export default function MusicSection() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const inView = useInView(sectionRef, { once: false, amount: 0.5 });
+  const isMobile = useMobile();
   
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -87,12 +89,14 @@ export default function MusicSection() {
   };
 
   function handleMouse(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    if (isMobile) return;
     const rect = event.currentTarget.getBoundingClientRect();
     x.set(event.clientX - rect.left - rect.width / 2);
     y.set(event.clientY - rect.top - rect.height / 2);
   }
 
   function handleMouseLeave() {
+    if (isMobile) return;
     x.set(0);
     y.set(0);
   }
@@ -108,7 +112,7 @@ export default function MusicSection() {
   return (
     <section ref={sectionRef} className="min-h-screen w-full bg-transparent flex items-center justify-center flex-col relative overflow-hidden px-4 py-20 bg-cover bg-center" style={{ perspective: "1500px" }}>
       
-      <MagicalFloatingHearts active={isPlaying} />
+      <MagicalFloatingHearts active={isPlaying} isMobile={isMobile} />
 
       {/* Main Content */}
       <div className="z-10 flex flex-col items-center" style={{ transformStyle: "preserve-3d" }}>
@@ -118,8 +122,8 @@ export default function MusicSection() {
           onClick={togglePlay}
           onMouseMove={handleMouse}
           onMouseLeave={handleMouseLeave}
-          style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-          initial={{ rotateY: 180, scale: 0.5, opacity: 0 }}
+          style={{ rotateX: isMobile ? 0 : rotateX, rotateY: isMobile ? 0 : rotateY, transformStyle: "preserve-3d" }}
+          initial={{ rotateY: isMobile ? 0 : 180, scale: 0.5, opacity: 0 }}
           whileInView={{ rotateY: 0, scale: 1, opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1.5, type: "spring" }}
@@ -164,7 +168,7 @@ export default function MusicSection() {
                 <motion.div
                   key={index}
                   className={`h-[40px] flex items-center justify-center w-full transition-all duration-500 ease-in-out px-4 text-center md:text-2xl text-lg ${
-                    index === activeLyricIndex ? "text-primary-pink scale-110 drop-shadow-[0_0_10px_rgba(199,44,104,0.8)] font-bold opacity-100" : "text-gray-500 scale-90 opacity-40 blur-[1px]"
+                    index === activeLyricIndex ? "text-primary-pink scale-110 drop-shadow-[0_0_10px_rgba(199,44,104,0.8)] font-bold opacity-100" : `text-gray-500 scale-90 opacity-40 ${isMobile ? "" : "blur-[1px]"}`
                   }`}
                 >
                   {lyric.text}

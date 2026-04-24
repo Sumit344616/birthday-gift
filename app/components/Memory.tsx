@@ -3,6 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { content } from "../data/content";
+import { useMobile } from "../hooks/useMobile";
 
 function TypewriterText({ text, delay, active }: { text: string; delay: number, active: boolean }) {
   const [displayText, setDisplayText] = useState("");
@@ -29,9 +30,9 @@ function TypewriterText({ text, delay, active }: { text: string; delay: number, 
   return <span>{displayText}</span>;
 }
 
-const GoldenFireflies = () => (
+const GoldenFireflies = ({ isMobile }: { isMobile: boolean }) => (
   <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-    {[...Array(120)].map((_, i) => (
+    {[...Array(isMobile ? 20 : 120)].map((_, i) => (
       <motion.div
         key={i}
         className="absolute rounded-full glow-effect"
@@ -62,17 +63,18 @@ const GoldenFireflies = () => (
 export default function Memory() {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.3 });
+  const isMobile = useMobile();
   
   return (
     <section ref={sectionRef} className="min-h-screen w-full relative flex items-center justify-center bg-transparent overflow-hidden px-6 py-24">
-      <GoldenFireflies />
+      <GoldenFireflies isMobile={isMobile} />
       
       <div className="z-10 flex flex-col items-center justify-center gap-4 text-center max-w-4xl min-h-[300px]">
         {content.memory.lines.map((line, idx) => (
           <motion.h2 
             key={idx}
-            initial={{ opacity: 0, filter: "blur(5px)" }}
-            whileInView={{ opacity: 1, filter: "blur(0px)" }}
+            initial={{ opacity: 0, filter: isMobile ? "none" : "blur(5px)" }}
+            whileInView={{ opacity: 1, filter: isMobile ? "none" : "blur(0px)" }}
             transition={{ duration: 1, delay: idx * 1.5 }}
             viewport={{ once: true, margin: "-100px" }}
             className={`text-3xl md:text-5xl font-serif text-white text-center glow-text h-12 md:h-16 flex items-center justify-center ${idx === 0 ? "mb-4" : "mt-6 text-xl md:text-3xl text-primary-pink drop-shadow-lg"}`}

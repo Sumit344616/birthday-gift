@@ -4,15 +4,20 @@ import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
 import { content } from "../data/content";
+import { useMobile } from "../hooks/useMobile";
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
+  const isMobile = useMobile();
+
   useEffect(() => {
     setMounted(true);
     
+    if (isMobile) return;
+
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX - window.innerWidth / 2);
       mouseY.set(e.clientY - window.innerHeight / 2);
@@ -20,7 +25,7 @@ export default function Hero() {
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  }, [isMobile, mouseX, mouseY]);
 
   const parallaxX = useTransform(mouseX, [-1000, 1000], [-50, 50]);
   const parallaxY = useTransform(mouseY, [-1000, 1000], [-50, 50]);
@@ -54,7 +59,7 @@ export default function Hero() {
         style={{ x: parallaxXReverse, y: parallaxYReverse }}
         className="absolute inset-0 overflow-hidden pointer-events-none z-0"
       >
-        {[...Array(15)].map((_, i) => (
+        {[...Array(isMobile ? 5 : 15)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute text-primary-pink opacity-20"
@@ -84,8 +89,8 @@ export default function Hero() {
 
       <div className="z-10 text-center px-4" style={{ transformStyle: "preserve-3d" }}>
         <motion.div
-          initial={{ opacity: 0, scale: 0.5, rotateX: 45, filter: "blur(10px)", z: -200 }}
-          animate={{ opacity: 1, scale: 1, rotateX: 0, filter: "blur(0px)", z: 0 }}
+          initial={{ opacity: 0, scale: 0.5, rotateX: 45, filter: isMobile ? "none" : "blur(10px)", z: -200 }}
+          animate={{ opacity: 1, scale: 1, rotateX: 0, filter: isMobile ? "none" : "blur(0px)", z: 0 }}
           transition={{ duration: 1.5, ease: "easeOut" }}
           className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mb-6"
         >
@@ -96,8 +101,8 @@ export default function Hero() {
         </motion.div>
 
         <motion.p
-          initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          initial={{ opacity: 0, y: 30, filter: isMobile ? "none" : "blur(10px)" }}
+          animate={{ opacity: 1, y: 0, filter: isMobile ? "none" : "blur(0px)" }}
           transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
           className="text-lg md:text-2xl text-gray-300 font-light tracking-wide mb-6 px-4"
         >
@@ -105,8 +110,8 @@ export default function Hero() {
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, filter: "blur(10px)" }}
-          animate={{ opacity: 1, filter: "blur(0px)" }}
+          initial={{ opacity: 0, filter: isMobile ? "none" : "blur(10px)" }}
+          animate={{ opacity: 1, filter: isMobile ? "none" : "blur(0px)" }}
           transition={{ duration: 1.5, delay: 1.6, ease: "easeOut" }}
           className="text-sm md:text-xl text-primary-pink font-serif italic mt-4"
         >

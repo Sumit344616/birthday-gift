@@ -2,10 +2,11 @@
 
 import { motion } from "framer-motion";
 import { content } from "../data/content";
+import { useMobile } from "../hooks/useMobile";
 
-const ShootingStars = () => (
+const ShootingStars = ({ isMobile }: { isMobile: boolean }) => (
   <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-    {[...Array(5)].map((_, i) => (
+    {[...Array(isMobile ? 2 : 5)].map((_, i) => (
       <motion.div
         key={i}
         className="absolute h-[1px] bg-gradient-to-r from-transparent via-white to-transparent"
@@ -33,6 +34,8 @@ const ShootingStars = () => (
 );
 
 export default function BusStand() {
+  const isMobile = useMobile();
+
   return (
     <section className="min-h-screen w-full flex items-center justify-center relative overflow-hidden px-6 py-24">
       
@@ -43,19 +46,19 @@ export default function BusStand() {
           backgroundImage: "url('/IMG_6843.jpg')",
         }}
       />
-      <div className="absolute inset-0 z-0 bg-black/70 backdrop-blur-[2px]" />
+      <div className={`absolute inset-0 z-0 bg-black/70 ${isMobile ? "" : "backdrop-blur-[2px]"}`} />
       
       {/* Gradient fade on top and bottom to blend with other sections */}
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none" />
 
-      <ShootingStars />
+      <ShootingStars isMobile={isMobile} />
       
       <div className="max-w-4xl text-center flex flex-col gap-2 relative z-10">
         {content.busStand.lines.map((line, idx) => (
           <motion.p
             key={idx}
-            initial={{ opacity: 0, filter: "blur(8px)", y: 10 }}
-            whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+            initial={{ opacity: 0, filter: isMobile ? "none" : "blur(8px)", y: 10 }}
+            whileInView={{ opacity: 1, filter: isMobile ? "none" : "blur(0px)", y: 0 }}
             transition={{ duration: 1.2, delay: idx * 0.6, ease: "easeOut" }}
             viewport={{ once: true, margin: "-100px" }}
             className={`text-2xl md:text-4xl font-serif glow-text drop-shadow-md ${line === "" ? "h-8" : "text-gray-200"}`}
