@@ -91,9 +91,9 @@ export default function MusicSection() {
               src={images[bgIndex]}
               alt="Background"
               fill
-              className="object-cover opacity-30 blur-sm"
+              className="object-cover opacity-40"
             />
-            <div className="absolute inset-0 bg-black/60" />
+            <div className="absolute inset-0 bg-black/50" />
           </motion.div>
         )}
       </AnimatePresence>
@@ -108,8 +108,8 @@ export default function MusicSection() {
           whileInView={{ scale: 1, opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1.5, type: "spring" }}
-          animate={isPlaying ? { scale: [1, 1.05, 1], boxShadow: "0 0 40px 10px rgba(199, 44, 104, 0.8)" } : {}}
-          className="relative flex items-center justify-center w-48 h-48 md:w-64 md:h-64 rounded-full p-2 border-2 border-primary-pink cursor-pointer mb-8 overflow-hidden z-20"
+          animate={isPlaying ? { scale: [1, 1.05, 1] } : {}}
+          className="relative flex items-center justify-center w-48 h-48 md:w-64 md:h-64 rounded-full p-2 border-2 border-primary-pink cursor-pointer mb-8 overflow-hidden z-20 shadow-[0_0_20px_rgba(199,44,104,0.5)]"
         >
           <AnimatePresence mode="popLayout">
             <motion.div

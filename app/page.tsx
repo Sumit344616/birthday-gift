@@ -8,7 +8,6 @@ import Gallery from "./components/Gallery";
 import BusStand from "./components/BusStand";
 import MusicSection from "./components/MusicSection";
 import SecretSection from "./components/SecretSection";
-import CustomCursor from "./components/CustomCursor";
 import { Heart } from "lucide-react";
 import { useMobile } from "./hooks/useMobile";
 
@@ -18,7 +17,6 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col bg-black text-white selection:bg-primary-pink selection:text-white relative w-full animated-gradient-bg">
-      <CustomCursor />
       
       <AnimatePresence>
         {!started && (
