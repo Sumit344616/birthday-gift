@@ -41,9 +41,9 @@ export default function BusStand() {
       
       {/* Background Image with Overlay */}
       <div 
-        className="absolute inset-0 z-0 bg-cover bg-center"
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: "url('/IMG_6843.jpg')",
+          backgroundImage: "url('/images/gallery-4.jpeg')",
         }}
       />
       <div className={`absolute inset-0 z-0 bg-black/70 ${isMobile ? "" : "backdrop-blur-[2px]"}`} />
